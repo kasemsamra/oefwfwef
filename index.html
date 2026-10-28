@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Programlamaya Giriş – Vize Sınavı</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--bd:#dde1ea;--ac:#2f5bea;--ok:#12805c;--okb:#e3f6ee;--no:#c0392b;--nob:#fdeceb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12141a;--card:#1c1f28;--tx:#e8eaf0;--mut:#9aa1b2;--bd:#2d3240;--ac:#7c9bff;--ok:#4cd6a0;--okb:#12342a;--no:#ff8a7a;--nob:#3a1d1a}}
+:root[data-theme="dark"]{--bg:#12141a;--card:#1c1f28;--tx:#e8eaf0;--mut:#9aa1b2;--bd:#2d3240;--ac:#7c9bff;--ok:#4cd6a0;--okb:#12342a;--no:#ff8a7a;--nob:#3a1d1a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+.w{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem;margin:8px 0 4px}
+.sub{color:var(--mut);margin:0 0 12px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:5}
+.pb{height:8px;background:var(--bd);border-radius:8px;overflow:hidden}
+.pb i{display:block;height:100%;width:0;background:var(--ac);transition:width .3s}
+.cnt{font-size:.85rem;color:var(--mut);margin-top:4px}
+.q{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
+.q h3{font-size:1rem;margin:0 0 10px}
+.o{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--bd);border-radius:10px;padding:10px;margin:6px 0;cursor:pointer}
+.o input{margin-top:4px}
+.o span{overflow-wrap:anywhere}
+.o.ok{background:var(--okb);border-color:var(--ok)}
+.o.no{background:var(--nob);border-color:var(--no)}
+.ex{font-size:.9rem;color:var(--mut);margin-top:8px}
+button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:12px 20px;font-size:1rem;cursor:pointer}
+button.s{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+#res{display:none;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin:12px 0;text-align:center}
+#res b{font-size:2.4rem;display:block}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>Programlamaya Giriş – Vize Sınavı</h1>
+<p class="sub">33 soru · Her soruda 4 şık · Sonunda sonucunuz gösterilir.</p>
+<div class="bar"><div class="pb"><i id="pb"></i></div><div class="cnt" id="cnt">0 / 33 cevaplandı</div></div>
+<div id="res"></div>
+<div id="qs"></div>
+<button id="sub">Sınavı Bitir</button>
+<p id="warn" class="sub"></p>
+</div>
+<script>
+const Q=[
+["RAM ile ilgili aşağıdakilerden hangisi yanlıştır?",["RAM geçici bir hafızadır.","CPU tarafından direkt erişim sağlanabilen en büyük hafıza RAM’dir.","RAM kapasitesi byte cinsinden ifade edilir.","Veriler RAM belleklere sistem tarafından belirli bir düzen dâhilinde gönderilir ve alınır."],3,"RAM rastgele erişimlidir; veriler sabit bir sıraya bağlı olmadan adres üzerinden okunup yazılır."],
+["Aşağıdakilerden hangisi doğrudur?",["Sözde kod yazarken mutlaka uyulması gereken yazım kuralları vardır.","Akış diyagramı yalnızca bilgisayar bilimi uzmanları tarafından kullanılan bir sunum tekniğidir.","Sözde kod anlambilim açısından anlaşılabilir ve tutarlı olmalıdır.","Akış diyagramı oluştururken, kişisel tercihe göre değişen şekil ve semboller seçilebilir."],2,"Sözde kodun katı bir sözdizimi yoktur; akış diyagramında standart semboller kullanılır."],
+["Aşağıdakilerden hangisi tek değer tutan bir veri yapısı (primitive data structure) tanımı değildir?",["char a;","int a;","float a;","char a[3];"],3,"char a[3] üç elemanlı bir dizidir."],
+["Aşağıdakilerden hangisi C programlama dilini tercih etme nedenleri arasında yer alır?",["Yüksek seviye soyutlama","Donanıma yakınlık","Büyük kod boyutu","Platformdan bağımsız olma"],1,""],
+["Derleme (compilation) tercüme tekniği ile ilgili aşağıdakilerden hangisi yanlıştır?",["Bütün program kodu girdi olarak alınır.","Tercüme sırasında ara kod üretilmez.","Tek seferde bütün kod satırlarının tercümesi yapılır.","Bütün kodun tercüme işlemi bitmeden program çalıştırılamaz."],1,"Derleme sırasında ara kod (ör. .i, .s, .o dosyaları) üretilir."],
+["Aşağıdaki programlama dili nesillerinden hangisi bir tercüman yazılıma ihtiyaç duymaz?",["1. nesil","2. nesil","3. nesil","4. nesil"],0,"1. nesil makine dilidir; doğrudan işlemci tarafından çalıştırılır."],
+["Onluk tabandaki 90 sayısının ikilik tabandaki karşılığı nedir?",["1010110","1101010","1011010","1110010"],2,"90 = 64+16+8+2 = 1011010"],
+["Aşağıdakilerden hangisinde C programı inşa aşamaları doğru olarak verilmiştir?",["Preprocess ⇒ Compile ⇒ Assemble ⇒ Link","Compile ⇒ Assemble ⇒ Preprocess ⇒ Link","Preprocess ⇒ Assemble ⇒ Compile ⇒ Link","Compile ⇒ Preprocess ⇒ Assemble ⇒ Link"],0,""],
+["GCC ile C programının inşası sürecinde alınan “error: ld returned 1” hatası hangi aşamada oluşur?",["Assemble","Link","Preprocess","Compile"],1,"ld, GCC’nin bağlayıcısıdır (linker)."],
+["Aşağıdakilerden hangisi çalıştırılacak programların aranacağı dizinleri belirten bir ortam değişkenidir?",["Home","Temp","Exe","Path"],3,""],
+["C dilinde tanımlı bir fonksiyonun başlığında fonksiyon isminden önce gelen void ifadesi ne anlama gelir?",["Fonksiyonun yardımcı fonksiyon olduğu","Fonksiyonun parametre kabul etmediği","Fonksiyonun değer dönmediği","Fonksiyonun aktif olmadığı"],2,""],
+["GCC ile C programı inşası neticesinde oluşacak çalıştırılabilir dosyanın adı ve uzantısı hangi opsiyon ile tanımlanabilir?",["-o","-c","-x","-S"],0,""],
+["C dilinde ___ özel karakteri fonksiyon gövdesinde yer alacak deyimleri gruplamak için kullanılır.",["{ }","[ ]","( )","< >"],0,""],
+["C dilinde ___ özel karakteri değişkenlere değer atamak için kullanılır.",["==","=","&","%"],1,""],
+["C dilinde ___ özel karakteri dizi (array) tanımlaması yapmak için kullanılır.",["{ }","( )","[ ]","< >"],2,""],
+["C dilinde ___ özel karakteri C deyimlerini (statement) sonlandırmak için kullanılır.",[",",":","#",";"],3,""],
+["C dilinde ___ özel karakteri önişlemci (preprocessor) talimatlarını ifade etmek için kullanılır.",["%","&","#","*"],2,""],
+["C dilinde ___ özel karakteri standard başlık dosyalarını kaynak koduna eklemek için kullanılır.",["\" \"","< >","{ }","[ ]"],1,"Örnek: #include <stdio.h>"],
+["C dilinde ___ özel karakteri çok satır yorum oluşturmak için kullanılır.",["//","#","\" \"","/* … */"],3,""],
+["C dilinde ___ özel karakteri printf fonksiyonunda format belirteci olarak kullanılır.",["%","&","*","//"],0,""],
+["Aşağıdaki özelliklerden hangisi 3. nesil, orta seviye bir programlama dili olan C ile beraber gelmiştir?",["Portability","Virtual machine","Platform independence","Just-in-Time compilation"],0,""],
+["Program kodunu, programın çalışması esnasında derleyen tercüme yazılımlarına ne ad verilir?",["Native compiler","JIT compiler","Cross compiler","Interpreter"],1,"JIT = Just-in-Time compiler."],
+["___ programlama dili gömülü sistemlerde yaygın olarak tercih edilir.",["Swift","C","R","JavaScript"],1,""],
+["___ programlama dili frontend web uygulamalarında yaygın olarak tercih edilir.",["Python","C","R","JavaScript"],3,""],
+["___ programlama dilinde girintileme (indentation) dili gramerinin bir parçasıdır.",["Python","C#","Swift","C"],0,""],
+["___ programlama dili istatistik ve veri analizi amaçlı yaygın olarak tercih edilir.",["Swift","C#","R","JavaScript"],2,""],
+["___ programlama dili iOS sistemlerde çalışacak uygulamaları geliştirmek için tercih edilir.",["C#","R","Python","Swift"],3,""],
+["___ programlama dili Windows sistemlerde Unity ile oyun geliştirmek için yaygın olarak tercih edilir.",["C#","C","R","Python"],0,""],
+["Aşağıdakilerden hangisinde C / C++ programı inşa aşaması doğru olarak verilmiştir?",["PreProcess ⇒ Assemble ⇒ Compile ⇒ Link","Compile ⇒ PreProcess ⇒ Assemble ⇒ Link","PreProcess ⇒ Compile ⇒ Link ⇒ Assemble","Preprocess ⇒ Compile ⇒ Assemble ⇒ Link"],3,""],
+["C / C++ programlama dillerinde makine koduna verilen isim aşağıdakilerden hangisidir?",["object code","bytecode","pseudo code","decode"],0,""],
+["C / C++ programlama inşa sürecinde üretilen bütün ara kodları kaydetmek için gcc hangi opsiyon ile çalıştırılmalıdır?",["-O","-Wall","-S","--save-temps"],3,"-O optimizasyon, -Wall uyarılar, -S ise yalnızca assembly çıktısıdır."],
+["Compilation ve interpretation tercüme teknikleri ile ilgili aşağıdakilerden hangisi doğrudur?",["Compile, kaynak kodunun sadece bir satırını tercüme eder.","Interpretation tekniği ile yapılan tercümede program daha yavaş çalışır.","Interpreter tercüme sırasında ara kod üretir.","Compilation tekniğinde hata ayıklamak daha zordur."],1,""],
+["Aşağıdakilerden hangisi fonksiyon kimlik bilgisi içinde yer almaz?",["Parametrelerin adı","Parametrelerin tipi","Parametrelerin sayısı","Parametrelerin sırası"],0,"Fonksiyon imzası: ad, parametre sayısı, tipi ve sırası. Parametre adları dahil değildir."]
+];
+const N=Q.length,qs=document.getElementById("qs"),L="ABCD";
+Q.forEach((q,i)=>{const d=document.createElement("div");d.className="q";const h=document.createElement("h3");h.textContent=(i+1)+") "+q[0];d.appendChild(h);
+q[1].forEach((t,j)=>{const l=document.createElement("label");l.className="o";const r=document.createElement("input");r.type="radio";r.name="q"+i;r.value=j;r.onchange=upd;const s=document.createElement("span");s.textContent=L[j]+") "+t;l.append(r,s);d.appendChild(l)});qs.appendChild(d)});
+function got(i){const c=document.querySelector('input[name="q'+i+'"]:checked');return c?+c.value:-1}
+function upd(){let n=0;for(let i=0;i<N;i++)if(got(i)>=0)n++;document.getElementById("cnt").textContent=n+" / "+N+" cevaplandı";document.getElementById("pb").style.width=(n/N*100)+"%"}
+const btn=document.getElementById("sub");
+btn.onclick=()=>{
+const bos=[];for(let i=0;i<N;i++)if(got(i)<0)bos.push(i+1);
+if(bos.length&&!confirm(bos.length+" soru boş. Yine de bitirmek istiyor musunuz?"))return;
+let d=0,y=0;
+[...qs.children].forEach((el,i)=>{const g=got(i),c=Q[i][2];if(g===c)d++;else if(g>=0)y++;
+el.querySelectorAll(".o").forEach((o,j)=>{o.querySelector("input").disabled=true;if(j===c)o.classList.add("ok");else if(j===g)o.classList.add("no")});
+const e=document.createElement("div");e.className="ex";e.textContent=(g===c?"✔ Doğru. ":(g<0?"Boş bırakıldı. ":"✘ Yanlış. "))+"Doğru cevap: "+L[c]+(Q[i][3]?" — "+Q[i][3]:"");el.appendChild(e)});
+const p=Math.round(d/N*100),r=document.getElementById("res");
+r.style.display="block";
+r.innerHTML="";
+const b=document.createElement("b");b.textContent=d+" / "+N;
+const t=document.createElement("div");t.textContent="Doğru: "+d+" · Yanlış: "+y+" · Boş: "+(N-d-y)+" · Başarı: %"+p;
+const m=document.createElement("div");m.className="sub";m.textContent=p>=85?"Harika! 🎉":p>=60?"İyi, biraz daha tekrar!":"Biraz daha çalışmalısın 💪";
+const a=document.createElement("button");a.className="s";a.textContent="Yeniden Başla";a.onclick=()=>location.reload();
+r.append(b,t,m,a);
+btn.style.display="none";window.scrollTo({top:0,behavior:"smooth"})};
+</script>
+</body>
+</html>
